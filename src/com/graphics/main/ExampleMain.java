@@ -109,13 +109,7 @@ public class ExampleMain {
 			      
 		    }
 		  });
-/*		
-		.addWindowListener(new WindowAdapter() {
-		    public void windowClosing(WindowEvent e) {
-		      System.exit(0);
-		    }
-		  });
-	*/	
+
 		testFrame.setVisible(true);
 		a.start(); // start the Animator, which periodically calls display() on the GLCanvas
 
