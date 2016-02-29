@@ -214,7 +214,7 @@ public class Draw {
 	}
 
 	public static void setPixel(int x, int y){
-		pixels[x][y] = true;
+		dahi.drawBigPixel(x, y);
 	}
 
 	public static void printArr(){

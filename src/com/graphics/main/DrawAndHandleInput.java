@@ -225,6 +225,13 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 
 	} // end display
 
+	
+	/**
+	 * parses through the renderedLines and calls the Draw.line method on all the stored lines
+	 */
+	private void drawLines(){
+		
+	}
 
 	/* 
 
