@@ -11,9 +11,9 @@ import javax.swing.JOptionPane;
 public class Prompter {
 
 	public static Integer[] getScreenSize(){
-		int width = askForPositiveIntPrompt("Enter screen Width number of grid squares.");
-		int height = askForPositiveIntPrompt("Enter screen Height number of grid squares");
-		Integer	[] result = {width,height};
+		int cols = askForPositiveIntPrompt("Enter screen Width number of grid squares.");
+		int rows = askForPositiveIntPrompt("Enter screen Height number of grid squares");
+		Integer	[] result = {cols,rows};
 		return result;
 	}
 	

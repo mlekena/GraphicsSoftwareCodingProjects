@@ -12,22 +12,84 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class Draw {
 
+	private static int height = 0;
+	private static int width = 0;
 	private static boolean [][] pixels = new boolean[20][20];
 	private static DrawAndHandleInput dahi = null;
 
+	/**
+	 * @param int x0
+	 * @param int y0
+	 * @param int xEnd
+	 * @param int yEnd
+	 */
 	public static void line(int x0, int y0, int xEnd, int yEnd){
 		LineBres(x0, y0, xEnd, yEnd);
 	}
+	/**
+	 * @param Coords start
+	 * @param Coords end
+	 */
 	public static void line(Coords start, Coords end){
 		line(start.getX(), start.getY(), end.getX(), end.getY());
 	}
 	
+	/**
+	 * @param LinePoint lp
+	 */
+	public static void line(LinePoints lp){
+		line(lp.getX(), lp.getY(), lp.getxEnd(), lp.getyEnd());
+	}
+	
+	/**
+	 * @param DrawAndHandleInput _dahi
+	 */
 	public static void setDrawAndHandleInput(DrawAndHandleInput _dahi){
 		dahi = _dahi;
 	}
 	
+	/**
+	 * @param h
+	 */
+	public static void setHeight(int h){
+		height = h;
+	}
+	
+	/**
+	 * @param w
+	 */
+	public static void setWidth(int w){
+		width = w;
+	}
+	
+	/**
+	 * @param height
+	 * @param width
+	 */
+	public static void setSize(int height, int width){
+		setHeight(height);
+		setWidth(width);
+	}
+	
+	/**
+	 * @param int x0
+	 * @param int y0
+	 * @param int xEnd
+	 * @param int yEnd
+	 */
 	private static void LineBres(int x0, int y0, int xEnd, int yEnd){
+		if (xEnd < x0){
+			int xTemp = xEnd;
+			int yTemp = yEnd;
+			
+			xEnd = x0;
+			yEnd = y0;
+			
+			x0 = xTemp;
+			y0 = yTemp;
+		}
 		int dy = yEnd - y0;
+		
 		if (dy >= 0){///////fix
 			positiveSlopelineBres(x0,y0,xEnd,yEnd);
 		}
@@ -36,6 +98,12 @@ public class Draw {
 		}
 	}
 
+	/**
+	 * @param int x0
+	 * @param int y0
+	 * @param int xEnd
+	 * @param int yEnd
+	 */
 	private static void positiveSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
 		int dx = Math.abs(xEnd - x0);
 		int dy = Math.abs(yEnd - y0);
@@ -71,7 +139,7 @@ public class Draw {
 			}
 		}
 		else{//is dy is greater than dy
-			System.out.println("Got to this line");
+			//System.out.println("Got to this line");
 			int p = 2* dx - dy;
 			int twoDx = 2 * dx;
 			int twoDxMinusDy = 2 * (dx - dy);
@@ -100,6 +168,12 @@ public class Draw {
 		}
 	}
 
+	/**
+	 * @param x0
+	 * @param y0
+	 * @param xEnd
+	 * @param yEnd
+	 */
 	private static void negativeSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
 		int dx = Math.abs(xEnd - x0);
 		int dy = Math.abs(yEnd - y0);
@@ -135,7 +209,7 @@ public class Draw {
 			}
 		}
 		else{//is dy is greater than dy
-			System.out.println("Got to this line");
+			//System.out.println("Got to this line");
 			int p = 2* dx - dy;
 			int twoDx = 2 * dx;
 			int twoDxMinusDy = 2 * (dx - dy);
@@ -164,14 +238,35 @@ public class Draw {
 		}
 	}
 	
+	/**
+	 * @param x0
+	 * @param y0
+	 * @param radius
+	 */
 	public static void circle( int x0, int y0,int radius){
 		circleMidPoint(x0, y0, radius);
 	}
 	
+	/**
+	 * @param center
+	 * @param radius
+	 */
 	public static void circle(Coords center, int radius){
 		circle(center.getX(), center.getY(), radius);
 	}
 	
+	/**
+	 * @param circlePoints
+	 */
+	public static void circles(CirclePoints circlePoints) {
+		circle(circlePoints.getX(), circlePoints.getY(), circlePoints.getRadius());
+	}
+	
+	/**
+	 * @param xC
+	 * @param yC
+	 * @param radius
+	 */
 	private static void  circleMidPoint(int xC, int yC, int radius){
 		ScreenPt circPt = new ScreenPt();
 		
@@ -194,6 +289,11 @@ public class Draw {
 		}
 	}
 	
+	/**
+	 * @param xCenter
+	 * @param yCenter
+	 * @param circPt
+	 */
 	private static void  circlePlotPoints(int xCenter, int yCenter, ScreenPt circPt){
 		/*if (validCoords())*/	setPixel(xCenter + circPt.getX(), yCenter + circPt.getY());
 		setPixel(xCenter - circPt.getX(), yCenter + circPt.getY());
@@ -206,6 +306,13 @@ public class Draw {
 
 	}
 	
+	/**
+	 * @param xTest
+	 * @param yTest
+	 * @param xMaxBound
+	 * @param yMaxBound
+	 * @return
+	 */
 	private static boolean validCoords(int xTest, int yTest, int xMaxBound, int yMaxBound){
 		if (xTest >= 0 && xTest < xMaxBound && yTest >= 0 && yTest < yMaxBound){
 			return true;
@@ -213,10 +320,17 @@ public class Draw {
 		return false;
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public static void setPixel(int x, int y){
 		dahi.drawBigPixel(x, y);
 	}
 
+	/**
+	 * 
+	 */
 	public static void printArr(){
 		String out = "";
 		String newLine = System.getProperty("line.separator");
@@ -234,7 +348,7 @@ public class Draw {
 		System.out.println(out);
 	}
 
-	public static void main(String [] args){
+	/*public static void main(String [] args){
 		//line (1,1,15,7);
 		//line(2,2,4,15);
 		//line TODO test for negative gradients
@@ -244,18 +358,32 @@ public class Draw {
 		//line(3,3,4,1);
 		circle(19,19,2);
 		printArr();
-	}
+	}*/
+	
 } 
 
+/**
+ * This is a helper class that is used by the circle drawing.
+ * 
+ * @author mlekena
+ *
+ */
 class ScreenPt{
 	
 	private int x,y;
 	
+	/**
+	 * 
+	 */
 	public ScreenPt(){
 		x = 0;
 		y = 0;
 	}
 	
+	/**
+	 * @param xValue
+	 * @param yValue
+	 */
 	void setCoords(int xValue, int yValue){
 		x = xValue;
 		y = yValue;

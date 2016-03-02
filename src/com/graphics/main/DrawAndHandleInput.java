@@ -29,6 +29,7 @@ import com.graphics.draw.primitives.Draw;
 import com.graphics.draw.primitives.LinePoints;
 import com.graphics.util.DrawModes;
 import com.graphics.util.GMath;
+import com.graphics.util.Prompter;
 import com.jogamp.opengl.DebugGL2;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -43,9 +44,9 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 {
 
 	/* this object will give us access to the gl functions */
-	private GL2            gl;
+	private GL2 gl;
 	/* this object will give us access to the glu functions */
-	private GLU            glu;
+	private GLU glu;
 
 	/* define the world coordinate limits */
 	public static  final int MIN_X =0;
@@ -60,8 +61,8 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	// number of rows and columns of big pixels to appear in the grid
 	// eventually these will be set by user input or via a command line
 	// parameter.  That is functionality you need to add for program 02.
-	public static final int BIGPIXEL_ROWS = 60;
-	public static final int BIGPIXEL_COLS = 60;
+	public static int BIGPIXEL_ROWS = 60;
+	public static int BIGPIXEL_COLS = 60;
 
 	// globals that hold the coordinates of the big pixel that is to be
 	// "turned on"
@@ -93,7 +94,11 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	public DrawAndHandleInput(GLCanvas c)
 	{
 		this.canvas = c;
+		/*Integer [] gridSize = Prompter.getScreenSize();
+		BIGPIXEL_COLS =gridSize[0];
+		BIGPIXEL_ROWS = gridSize[1];*///TODO uncomment before submittle
 		Draw.setDrawAndHandleInput(this);
+		Draw.setSize(BIGAREA_HEIGHT, BIGAREA_WIDTH);
 	}
 	// ====================================================================================
 	//
@@ -204,7 +209,9 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 			gl.glVertex2d(BIGAREA_WIDTH,(double)row*BIGAREA_HEIGHT/BIGPIXEL_ROWS);
 			gl.glEnd();
 		}
-
+		
+		drawLines();
+		drawCircles();
 		// uses the global double variables that were set when user
 		// clicked as the coordinates of the bigpixel to be drawn.
 		if(currentLeftClick != null){
@@ -230,7 +237,25 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	 * parses through the renderedLines and calls the Draw.line method on all the stored lines
 	 */
 	private void drawLines(){
-		
+		for (int i = 0; i < renderedLines.length; i++){
+			if (renderedLines[i] != null) {
+				Draw.line(renderedLines[i]);
+			}
+			else{
+				break;
+			}
+		}
+	}
+	
+	public void drawCircles(){
+		for (int i = 0; i < renderedCircles.length; i++){
+			if (renderedCircles[i] != null){
+				Draw.circles(renderedCircles[i]);
+			}
+			else{
+				break;
+			}
+		}
 	}
 
 	/* 
@@ -250,6 +275,9 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	 */
 	public void drawBigPixel(int x, int y)
 	{
+		if (x >BIGPIXEL_COLS-1 || x < 0 || y > BIGPIXEL_ROWS-1 || y < 0){
+			return;
+		}
 		// because the y screen coordinates increase as we go down 
 		// and the y world coordinates increase as we go up
 		// we need to compute flip_y which will be the y coordinate
@@ -461,6 +489,7 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 						printArray(renderedLines);
 						break;
 			case CIRCLE: int radius = GMath.distance(currentLeftClick, currentRightClick);
+						//System.out.println(radius);
 						renderedCircles[circleIndex] = new CirclePoints(currentLeftClick, radius);
 						incrementCircleIndex();
 						printArray(renderedCircles);

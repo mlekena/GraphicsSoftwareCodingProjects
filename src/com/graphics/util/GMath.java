@@ -31,7 +31,11 @@ public class GMath {
 	 * @return
 	 */
 	public static int distance(int x0, int y0, int xEnd, int yEnd){
-		return (int)Math.hypot(xEnd - x0, yEnd - y0);
+		System.out.println(xEnd+"-"+x0+" "+yEnd+" "+y0);
+		System.out.println((xEnd - x0) +"<_>"+ (yEnd - y0));
+		int result = (int)Math.hypot(xEnd - x0, yEnd - y0);
+		System.out.println("Radius = " + result);
+		return result;
 	}
 	
 	/**
@@ -40,6 +44,6 @@ public class GMath {
 	 * @return
 	 */
 	public static int distance(Coords start, Coords end){
-		return distance(start.getX(), end.getX(), start.getY(), end.getY());
+		return distance(start.getX(), start.getY(), end.getX(),  end.getY());
 	}
 }
