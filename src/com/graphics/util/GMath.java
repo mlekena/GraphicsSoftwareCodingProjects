@@ -1,6 +1,6 @@
 package com.graphics.util;
 
-import com.graphics.draw.primitives.Coords;
+import com.graphics.draw.primitives.Coords2d;
 
 public class GMath {
 	
@@ -43,7 +43,7 @@ public class GMath {
 	 * @param end
 	 * @return
 	 */
-	public static int distance(Coords start, Coords end){
+	public static int distance(Coords2d start, Coords2d end){
 		return distance(start.getX(), start.getY(), end.getX(),  end.getY());
 	}
 }

@@ -9,7 +9,7 @@ package com.graphics.draw.primitives;
  */
 public class CirclePoints {
 	
-	private Coords coordinates;
+	private Coords2d coordinates;
 	private int radius;
 
 	/**
@@ -18,11 +18,11 @@ public class CirclePoints {
 	 * @param _radius
 	 */
 	public CirclePoints(int _x, int _y, int _radius){
-		coordinates = new Coords(_x,_y);
+		coordinates = new Coords2d(_x,_y);
 		radius = _radius;
 	}
 	
-	public CirclePoints(Coords c, int _radius){
+	public CirclePoints(Coords2d c, int _radius){
 		 this(c.getX(), c.getY(), _radius);
 	}
 

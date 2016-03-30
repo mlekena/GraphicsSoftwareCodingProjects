@@ -9,14 +9,14 @@ package com.graphics.draw.primitives;
  */
 public class LinePoints {
 
-	private Coords startCoords;
-	private Coords endCoords;
+	private Coords2d startCoords;
+	private Coords2d endCoords;
 	
 	public LinePoints(int _x, int _y, int _xEnd, int _yEnd){
-		startCoords = new Coords(_x,_y);
-		endCoords = new Coords(_xEnd,_yEnd);
+		startCoords = new Coords2d(_x,_y);
+		endCoords = new Coords2d(_xEnd,_yEnd);
 	}
-	public LinePoints(Coords start, Coords end){
+	public LinePoints(Coords2d start, Coords2d end){
 		this.startCoords = start;
 		this.endCoords = end;
 	}

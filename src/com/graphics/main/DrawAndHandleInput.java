@@ -24,7 +24,7 @@ import java.util.Arrays;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import com.graphics.draw.primitives.CirclePoints;
-import com.graphics.draw.primitives.Coords;
+import com.graphics.draw.primitives.Coords2d;
 import com.graphics.draw.primitives.Draw;
 import com.graphics.draw.primitives.LinePoints;
 import com.graphics.util.DrawModes;
@@ -74,8 +74,8 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	private int lineIndex = 0, circleIndex = 0;
 	
 	//click coordinates management data
-	private Coords currentLeftClick = null;
-	private Coords currentRightClick = null;
+	private Coords2d currentLeftClick = null;
+	private Coords2d currentRightClick = null;
 	
 	// max nUmber of primitives to allow to be drawn
 	int maxNumberOfPrimitives = 3;
@@ -298,7 +298,7 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 
 	}
 	
-	public void drawBigPixel(Coords c){
+	public void drawBigPixel(Coords2d c){
 		drawBigPixel(c.getX(), c.getY());
 	}
 	/**
@@ -472,16 +472,16 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	}
 
 	private void onRightClick(int bigpixelx2, int bigpixely2) {
-		currentRightClick = new Coords(bigpixelx2, bigpixely2);
+		currentRightClick = new Coords2d(bigpixelx2, bigpixely2);
 		addPrimitive(currentLeftClick);
 		
 	}
 	
 	private void onLeftClick(int bigpixelx2, int bigpixely2) {
-		currentLeftClick = new Coords(bigpixelx2, bigpixely2);
+		currentLeftClick = new Coords2d(bigpixelx2, bigpixely2);
 		addPrimitive(currentRightClick);
 	}
-	private void addPrimitive(Coords secondCoord){
+	private void addPrimitive(Coords2d secondCoord){
 		if (secondCoord != null){
 			switch (mode){
 			case LINE: renderedLines[lineIndex] = new LinePoints(currentLeftClick, currentRightClick);

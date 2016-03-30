@@ -3,6 +3,9 @@
  */
 package com.graphics.draw.primitives;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.graphics.main.DrawAndHandleInput;
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -27,10 +30,10 @@ public class Draw {
 		LineBres(x0, y0, xEnd, yEnd);
 	}
 	/**
-	 * @param Coords start
-	 * @param Coords end
+	 * @param Coords2d start
+	 * @param Coords2d end
 	 */
-	public static void line(Coords start, Coords end){
+	public static void line(Coords2d start, Coords2d end){
 		line(start.getX(), start.getY(), end.getX(), end.getY());
 	}
 	
@@ -89,12 +92,16 @@ public class Draw {
 			y0 = yTemp;
 		}
 		int dy = yEnd - y0;
-		
+		Coords2d [] linePoints;
 		if (dy >= 0){///////fix
-			positiveSlopelineBres(x0,y0,xEnd,yEnd);
+			 linePoints = positiveSlopelineBres(x0,y0,xEnd,yEnd);
 		}
 		else{
-			negativeSlopelineBres(x0,y0,xEnd,yEnd);
+			linePoints = negativeSlopelineBres(x0,y0,xEnd,yEnd);
+		}
+		
+		for (Coords2d c : linePoints){
+			setPixel(c.getX(), c.getY());
 		}
 	}
 
@@ -104,10 +111,10 @@ public class Draw {
 	 * @param int xEnd
 	 * @param int yEnd
 	 */
-	private static void positiveSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
+	private static Coords2d[] positiveSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
 		int dx = Math.abs(xEnd - x0);
 		int dy = Math.abs(yEnd - y0);
-		
+		ArrayList<Coords2d> result = new ArrayList<Coords2d>();
 		int x , y;
 
 		if (dy <= dx){
@@ -124,7 +131,8 @@ public class Draw {
 				x = x0;
 				y = y0;
 			}
-			setPixel(x,y);
+			//setPixel(x,y);
+			result.add(new Coords2d(x,y));
 
 			while (x < xEnd){
 				x++;
@@ -135,8 +143,11 @@ public class Draw {
 					y++;
 					p+= twoDyMinusDx;
 				}
-				setPixel(x, y); 
+				//setPixel(x, y);
+				result.add(new Coords2d(x,y));
 			}
+			
+			
 		}
 		else{//is dy is greater than dy
 			//System.out.println("Got to this line");
@@ -152,7 +163,8 @@ public class Draw {
 				x = x0;
 				y = y0;
 			}
-			setPixel(x,y);
+			//setPixel(x,y);
+			result.add(new Coords2d(x,y));
 			
 			while (y < yEnd){
 				y++;
@@ -163,9 +175,12 @@ public class Draw {
 					x++;
 					p += twoDxMinusDy;
 				}
-				setPixel(x,y);
+				//setPixel(x,y);
+				result.add(new Coords2d(x,y));
 			}
 		}
+		
+		return Arrays.copyOf(result.toArray(), result.size(), Coords2d[].class);//(Coords2d[])result.toArray();
 	}
 
 	/**
@@ -174,10 +189,10 @@ public class Draw {
 	 * @param xEnd
 	 * @param yEnd
 	 */
-	private static void negativeSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
+	private static Coords2d[] negativeSlopelineBres(int x0, int y0, int xEnd, int yEnd) {
 		int dx = Math.abs(xEnd - x0);
 		int dy = Math.abs(yEnd - y0);
-		
+		ArrayList<Coords2d> result = new ArrayList<Coords2d>();
 		int x , y;
 
 		if (dy <= dx){
@@ -194,7 +209,8 @@ public class Draw {
 				x = x0;
 				y = y0;
 			}
-			setPixel(x,y);
+			//setPixel(x,y);
+			result.add(new Coords2d(x,y));
 
 			while (x > xEnd){
 				x--;
@@ -205,7 +221,8 @@ public class Draw {
 					y++;
 					p+= twoDyMinusDx;
 				}
-				setPixel(x, y); 
+				//setPixel(x, y);
+				result.add(new Coords2d(x,y));
 			}
 		}
 		else{//is dy is greater than dy
@@ -222,7 +239,8 @@ public class Draw {
 				x = x0;
 				y = y0;
 			}
-			setPixel(x,y);
+			//setPixel(x,y);
+			result.add(new Coords2d(x,y));
 			
 			while (y > yEnd){
 				y--;
@@ -233,9 +251,11 @@ public class Draw {
 					x++;
 					p += twoDxMinusDy;
 				}
-				setPixel(x,y);
+				//setPixel(x,y);
+				result.add(new Coords2d(x,y));
 			}
 		}
+		return Arrays.copyOf(result.toArray(), result.size(), Coords2d[].class);   //(Coords2d[])result.toArray();
 	}
 	
 	/**
@@ -251,7 +271,7 @@ public class Draw {
 	 * @param center
 	 * @param radius
 	 */
-	public static void circle(Coords center, int radius){
+	public static void circle(Coords2d center, int radius){
 		circle(center.getX(), center.getY(), radius);
 	}
 	
@@ -347,6 +367,65 @@ public class Draw {
 		}
 		System.out.println(out);
 	}
+	
+	/**
+	 * This method will scan the pixels around to test if 3 pixels have been filled and thus the intensity of the orginal pixel
+	 * 
+	 * @param x
+	 * @param y
+	 * @param grid
+	 * @return
+	 */
+	public static int filledSquares(int x, int y, boolean [][] grid){
+		int count = 0;
+		for (int i = x - 1; i <= x + 1; i++){
+			for (int j = y - 1; j <= y + 1; j++){
+				if (grid[i][j]) count++;
+				if (count == 3) return count;
+			}
+		}
+		return count;
+	}
+	
+	/**
+	 * [1,2,1]
+	 * [2,4,2]
+	 * [1,2,1]
+	 * 
+	 * @return
+	 */
+	public static float squareFilter(int x, int y, boolean grid[][]){
+		int [][] filter = makeFilterMask(0);
+		int count = 0;
+		for (int i = x - 1; i <= x + 1; i++){
+			for (int j = y - 1; j <= y + 1; j++){
+				if (grid[i][j]) count += filter[i][j];
+			}
+		}
+		return count;
+	}
+	
+	private static int [][] makeFilterMask(int type){
+		switch(type){
+		case 0 : int [][] squareFilter = {{1,2,1},{2,4,2},{1,2,1}};
+				return squareFilter;
+		case 1 : int [][] coneFilter = {{1,2,1},{2,4,2},{1,2,1}};
+				return coneFilter;
+		case 2 : int [][] gaussianFilter = {{1,2,1},{2,4,2},{1,2,1}};
+				return gaussianFilter;
+		default : int [][] d = {{1,1,1},{1,1,1},{1,1,1}};
+					return d;
+		}
+	}
+	
+	private static boolean[][] createSuperSamplingArray(int x0, int y0, int xEnd, int yEnd){
+		int dx = Math.abs((xEnd - x0)*3);
+		int dy = Math.abs((yEnd - y0)*3);
+		
+		return new boolean[dx][dy];
+	}
+	
+	
 
 	/*public static void main(String [] args){
 		//line (1,1,15,7);

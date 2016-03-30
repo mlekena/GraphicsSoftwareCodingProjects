@@ -7,7 +7,7 @@ package com.graphics.draw.primitives;
  * @author mlekena
  *
  */
-public class Coords {
+public class Coords2d {
 
 	private int x;
 	private int y;
@@ -17,7 +17,7 @@ public class Coords {
 	 * @param x
 	 * @param y
 	 */
-	public Coords(int x, int y){
+	public Coords2d(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
@@ -53,7 +53,7 @@ public class Coords {
 	 */
 	@Override
 	public String toString() {
-		return "Coords [x=" + x + ", y=" + y + "]";
+		return "Coords2d [x=" + x + ", y=" + y + "]";
 	}
 	
 	
