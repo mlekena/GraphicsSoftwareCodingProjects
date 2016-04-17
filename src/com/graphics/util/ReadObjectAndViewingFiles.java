@@ -1,4 +1,5 @@
 package com.graphics.util;
+
 /*
    Code to read an object file and a viewing parameter file
 
@@ -18,6 +19,14 @@ package com.graphics.util;
       by a space in the 
       Run, Run Configurations, Arguments tab, Program arguments text area
 
+   Revised on 04/04/2016
+      - to have polygon information (vertex indices, color) stored in a
+        Polygon class
+      - put all the data variables that need to be used in other classes
+        as public static global variables
+      - allocated space for the Vertex array and Polygon array only after
+        we read the size from the object file.
+
 */
 /*
  * file formats for the object and view files modelled after
@@ -26,10 +35,26 @@ package com.graphics.util;
  */
 import java.io.*;
 import java.util.*;
+import com.graphics.draw.primitives.*;
+import com.graphics.draw.primitives.Vector;
 
 public class ReadObjectAndViewingFiles 
 {
-	public static void main(String args[]) {
+
+	 private static Vertex v[];
+	 private static Polygon polygon[];
+
+	/* Viewing parameters */
+	 private static Vertex vrp;
+	 private static Vector vpn;
+	 private static Vector vup;
+	 private static Vertex prp;
+	 private static double umin=0, umax=0, vmin=0, vmax=0;
+	 private static double frontClip=0, backClip=0;
+
+
+
+	public static void readViewParameters(String args[]) {
 
 		// NOTE: this program as written expects the 2 command line arguments
 		// the first is the object file name 
@@ -46,25 +71,6 @@ public class ReadObjectAndViewingFiles
 
 		String objfName = args[0]; // get the object file name from first command line parameter
 
-		final int MAX_VERTICES = 400;
-		final int MAX_POLYS = 200;
-		final int MAX_EDGES = 7;
-
-		Vertex v[] = new Vertex[MAX_VERTICES];
-		/* index is the vertex number,
-		 and the Vertex is (x, y, z, 1) coordinates of a vertex of the object */
-
-		double polyColor[][] = new double[MAX_POLYS][3];
-		/* first index is the polygon number, the next index goes from 0 to 2
-		 representing the RGB values of that polygon */
-
-		int polygon[][] = new int[MAX_POLYS][MAX_EDGES + 1];
-		/* polygon[i][0] stores the number of vertices that describes 
-		 the polygon i.
-		 polygon[i][1] through polygon[i][polygon[i][0]] store the 
-		 vertex numbers in counter clockwise order
-		 */
-
 		int numVs = 0, numPolys = 0;
 
 		try {
@@ -76,6 +82,7 @@ public class ReadObjectAndViewingFiles
 			if (tempstr.equals("VERTICES")) {
 				tempstr = st.nextToken();
 				numVs = Integer.parseInt(tempstr);
+				v = new Vertex[numVs];
 			} else {
 				numVs = 0;
 				System.out.println("Expecting VERTICES line in file "
@@ -89,6 +96,7 @@ public class ReadObjectAndViewingFiles
 			if (tempstr.equals("POLYGONS")) {
 				tempstr = st.nextToken();
 				numPolys = Integer.parseInt(tempstr);
+				polygon = new Polygon[numPolys];
 			} else {
 				System.out.println("Expecting POLYGONS line in file "
 						+ objfName);
@@ -149,22 +157,24 @@ public class ReadObjectAndViewingFiles
 				st.nextToken(); // ignore the string COUNT 
 				tempstr = st.nextToken(); // this is the value of count (number of vertices for this poly)
 				int numVsForThisPoly = Integer.parseInt(tempstr);
-				polygon[i][0] = numVsForThisPoly;
+				polygon[i] = new Polygon(numVsForThisPoly);
 				st.nextToken(); // ignore the string VERTICES 
 
 				//example line: COUNT 5 VERTICES 5 4 3 2 1 COLOR .4 .2 .4
 
 				for (int j = 1; j <=numVsForThisPoly; j++) {
 					tempstr = st.nextToken();
-					polygon[i][j] = Integer.parseInt(tempstr) - 1;
+					polygon[i].addVIndex(Integer.parseInt(tempstr) - 1);
 				}
 
 				st.nextToken(); // ignore the string COLOR
 
-				for (int j = 0; j < 3; j++) {
-					tempstr = st.nextToken();
-					polyColor[i][j] = Double.parseDouble(tempstr);
-				}
+				tempstr = st.nextToken();
+				polygon[i].setRed(Double.parseDouble(tempstr));
+				tempstr = st.nextToken();
+				polygon[i].setGreen(Double.parseDouble(tempstr));
+				tempstr = st.nextToken();
+				polygon[i].setBlue(Double.parseDouble(tempstr));
 
 			}
 
@@ -186,17 +196,11 @@ public class ReadObjectAndViewingFiles
 		// write code here to print out the vertices 
 
 		for (int i = 0; i < numPolys; i++) {
-			System.out.print("Polygon number " + i + " vertices:");
-			for (int j = 1; j <= polygon[i][0]; j++)
-				System.out.print(" " + polygon[i][j]);
+			System.out.println("Polygon number " + i + ":");
+			for (int j = 0; j < polygon[i].getNumVs(); j++)
+				System.out.println(" " + v[polygon[i].vertexIndices[j]].toString());
 			System.out.println();
-		}
-
-		for (int i = 0; i < numPolys; i++) {
-			System.out.print("Polygon number " + i + " RGB:");
-			for (int j = 0; j < 3; j++)
-				System.out.print(" " + polyColor[i][j]);
-			System.out.println();
+			System.out.println(" with color: " + polygon[i].getColorInfo() + "\n");
 		}
 
 		// ================================================================
@@ -205,13 +209,6 @@ public class ReadObjectAndViewingFiles
 
 		String viewfName = args[1]; // second command line arg
 		BufferedReader viewFileBR;
-		/* Viewing parameters */
-		Vertex vrp;
-		Vector vpn;
-		Vector vup;
-		Vertex prp;
-		double umin=0, umax=0, vmin=0, vmax=0;
-		double frontClip=0, backClip=0;
 
 		try {
 			viewFileBR = new BufferedReader(new FileReader(viewfName));
@@ -352,8 +349,30 @@ public class ReadObjectAndViewingFiles
 
 		System.out.print("BACK =");
 		System.out.println(" " + backClip);
+		
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		/*
+		 * Setup the global RenderParameters variables
+		 * 
+		 */
+		
+		RenderParameters.v = v;
+		RenderParameters.polygon = polygon;
+
+		/* Viewing parameters */
+		RenderParameters.vrp = vrp;
+		RenderParameters.vpn = vpn;
+		RenderParameters.vup = vup;
+		RenderParameters.prp = prp;
+		RenderParameters.umin = umin;
+		RenderParameters.umax = umax;
+		RenderParameters.vmin = vmin;
+		RenderParameters.vmax = vmax;
+		RenderParameters.frontClip = frontClip;
+		RenderParameters.backClip = backClip;
+		
 
 	} // end of main		
 
 } // end of class
-

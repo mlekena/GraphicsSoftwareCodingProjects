@@ -1,0 +1,42 @@
+Overall comments on style, efficiency, Java conventions etc.
+
+A few points to consider though for Program 3 and more:
+
+1) Always follow the Java conventions which include the following:
+
+   All class names should start with an uppercase letter.
+   All variable names should start with a lowercase letter.
+   All method names should start with a lowercase letter.
+
+   Any class name, variable name or method name that is more than one word
+   should have each internal word capitalized.
+    e.g. for a class name:  EmployeeInformation
+         for a variable name: employeeName
+         for a method name: drawBigPixel
+
+Read the following pages:
+http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-135099.html
+http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141388.html
+http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-142311.html
+
+2) Efficiency
+
+   For program 3 you will need to generate the Nper matrix and other 
+   matrices.  The creation of the matrix should only occur when the
+   information (VRP, Vup, etc.) that it depends on changes.  e.g. the
+   Nper matrix should be created once at the beginning of the program
+   after reading in the .view file.  Then only recreate it if any of
+   the viewing parameters change.
+
+   Also, it would make sense to only recompute the screen points 
+   based on the original vertices once when the Nper matrix changes.
+   
+   Remember that the display method is called many times per second
+   and there's no need to have it recompute the Nper matrix everytime,
+   nor does it need to recompute the screen points from the original
+   vertices every time display is called.
+
+
+3) Do not depend on always having 10 vertices or some specific number
+   of polygons.  Same with the viewing parameters --- don't assume
+   any of the viewing parameters will be some specific value.

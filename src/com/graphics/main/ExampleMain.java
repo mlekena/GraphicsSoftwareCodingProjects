@@ -16,6 +16,7 @@ DrawAndHandleInput which in a GLEventListener as well as a KeyListener and Mouse
 import java.awt.Frame;
 import java.awt.event.*;
 
+import com.graphics.util.ReadObjectAndViewingFiles;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -28,7 +29,10 @@ public class ExampleMain {
 	public static Frame testFrame;
 	public static void main(String[] args) 
 	{
-	    /* Create the Frame */
+		/*Initialise the view parameters from the view and object files*/
+		ReadObjectAndViewingFiles.readViewParameters(args);
+		
+		/* Create the Frame */
       	testFrame = new Frame("TestFrame");
 
       
@@ -43,7 +47,7 @@ public class ExampleMain {
 	    /* set the window to be 400x500 pixels 
              higher b/c of borders
           */
-	        testFrame.setSize( 510, 428 );
+	        testFrame.setSize( 500, 500 );
 
 
 		// This allows us to define some attributes

@@ -6,7 +6,7 @@ package com.graphics.draw.primitives;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.graphics.main.DrawAndHandleInput;
+import com.graphics.main.DrawAndHandleInput1;
 import com.jogamp.opengl.awt.GLCanvas;
 
 /**
@@ -18,7 +18,7 @@ public class Draw {
 	private static int height = 0;
 	private static int width = 0;
 	private static boolean [][] pixels = new boolean[20][20];
-	private static DrawAndHandleInput dahi = null;
+	private static DrawAndHandleInput1 dahi = null;
 
 	/**
 	 * @param int x0
@@ -45,9 +45,9 @@ public class Draw {
 	}
 	
 	/**
-	 * @param DrawAndHandleInput _dahi
+	 * @param DrawAndHandleInput1 _dahi
 	 */
-	public static void setDrawAndHandleInput(DrawAndHandleInput _dahi){
+	public static void setDrawAndHandleInput(DrawAndHandleInput1 _dahi){
 		dahi = _dahi;
 	}
 	
