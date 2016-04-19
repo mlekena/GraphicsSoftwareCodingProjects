@@ -15,9 +15,10 @@ import com.graphics.draw.primitives.Vertex;
  *
  */
 public class RenderParameters {
-	public static Vertex v[];
+	public static Vertex cache[];
 	public static Polygon polygon[];
-	
+	public static Vertex v[];
+	//public static 
 	//public static ArrayList<Vertex[]> historyOfRenderedVertices;
 
 	/* Viewing parameters */
@@ -32,10 +33,6 @@ public class RenderParameters {
 	private static boolean rerender = false;
 
 	public static Matrix getPerpMatrix(){
-
-		if (Nper != null && !rerender){
-			return Nper;
-		} else {
 			Double[] vrpOriginTranlationMatrix = {1.0,0.0,0.0,-vrp.x(),
 					0.0,1.0,0.0,-vrp.y(),
 					0.0,0.0,1.0,-vrp.z(),
@@ -74,10 +71,6 @@ public class RenderParameters {
 
 			System.out.println("prp Origin: " + prpToOrigin);
 
-			Vector3 cwMinusprp = new Vector3((umin + umax)/(2 - prp.x()),
-					(vmin + vmax)/(2 - prp.y()),
-					-prp.z());
-
 			double shx = ((((umin + umax))/2)-prp.x())/ prp.z(); //(prp.x() - (umax - umin))/2/(-1*prp.z()); //
 			double shy = ((((vmin + vmax))/2)-prp.y())/ prp.z(); //(prp.y() - (vmax - vmin))/2/(-1*prp.z());// (((umin + umax)*prp.y())/2-prp.z()) + 1/prp.y();
 
@@ -109,23 +102,25 @@ public class RenderParameters {
 
 			System.out.println("scale: " + scaleMat);
 
-			//Matrix nper = vrpToOrigin.multiply(r).multiply(prpToOrigin).multiply(shper).multiply(scaleMat);
 			Matrix nper = scaleMat.multiply(shper).multiply(prpToOrigin).multiply(r).multiply(vrpToOrigin);
 			System.out.println("Nper: " + nper);
 			
 			Nper = nper;
 			updateVectices();
-		}
+		
 		return Nper;
 		
 	}
 	
 	private static void updateVectices(){
-		Vertex newVertexSet[] = new Vertex[v.length];
-		for (int i = 0; i < v.length; i++){
+		if (cache == null){
+			cache = new Vertex[v.length];
+		}
+		Vertex newVertexSet[] = new Vertex[cache.length];
+		for (int i = 0; i < cache.length; i++){
 			newVertexSet[i] = Nper.multiply(v[i]);
 		}
-		v = newVertexSet;
+		cache = newVertexSet;
 		
 	}
 }

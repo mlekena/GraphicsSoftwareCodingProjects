@@ -111,9 +111,9 @@ public class Polygon
 	}
 	
 	public Vector3 normal(){
-		Vertex center = RenderParameters.v[vertexIndices[0]];
-		Vertex one = RenderParameters.v[vertexIndices[1]];
-		Vertex end = RenderParameters.v[vertexIndices[getNumVs()-1]];
+		Vertex center = RenderParameters.cache[vertexIndices[0]];
+		Vertex one = RenderParameters.cache[vertexIndices[1]];
+		Vertex end = RenderParameters.cache[vertexIndices[getNumVs()-1]];
 		
 		Vertex dirVertexOne = one.subtract(center);
 		Vertex dirVertexTwo = end.subtract(center);
@@ -123,7 +123,7 @@ public class Polygon
 	
 	public Vertex planeEquation(){
 		Vector3 normal = normal();
-		Vertex point = RenderParameters.v[vertexIndices[0]];
+		Vertex point = RenderParameters.cache[vertexIndices[0]];
 		double paramD = normal.x()*point.x() + normal.y()*point.y() + normal.z()*point.z();
 		
 		return new Vertex(normal.x(), normal.y(), normal.z(), paramD);

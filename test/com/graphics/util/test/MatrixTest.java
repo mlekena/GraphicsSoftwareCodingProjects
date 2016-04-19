@@ -26,7 +26,7 @@ public class MatrixTest {
 		
 		System.out.println(mat.multiply(zm));
 		
-		Vertex v = new Vertex(1,2,3,4);
+		Vertex v = new Vertex(1,2,3,1);
 		
 		Matrix m = new Matrix(new Double[]{1.0,0.0,0.0,1.0,
 											0.0,1.0,0.0,1.0,

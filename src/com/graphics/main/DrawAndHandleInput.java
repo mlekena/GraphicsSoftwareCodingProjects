@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Dimension2D;
 
+import com.graphics.draw.primitives.Matrix;
 import com.graphics.draw.primitives.Polygon;
 import com.graphics.draw.primitives.Vector3;
 import com.graphics.draw.primitives.Vertex;
@@ -137,7 +138,7 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 
 		// this will swap the buffers (when double buffering)
 		// canvas.swapBuffers() should do the same thing
-		//drawable.swapBuffers();
+		drawable.swapBuffers();
 
 	} // end display
 
@@ -145,7 +146,7 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 		gl.glColor3f((float)poly.getRed(), (float)poly.getGreen(), (float)poly.getBlue());
 		gl.glBegin(GL2.GL_POLYGON);
 		for (int index = 0; index < poly.vertexIndices.length; index++){
-			Vertex currentVert = RenderParameters.v[poly.vertexIndices[index]];
+			Vertex currentVert = RenderParameters.cache[poly.vertexIndices[index]];
 			double x = (-1*currentVert.x())/currentVert.z();
 			double y = (-1*currentVert.y())/currentVert.z();
 			gl.glVertex2d(x , y);
@@ -205,11 +206,88 @@ public class DrawAndHandleInput implements GLEventListener, KeyListener, MouseLi
 	}
 	public void keyTyped(KeyEvent ke) {
 		char ch = ke.getKeyChar();
+		double speed = 1.0;
 		switch (ch) 
 		{
 		case 'q': 
 			System.exit(0);
 			break;
+			//panning I think
+		case 'w':
+			Matrix positiveZ = new Matrix(new Double[]{1.0, 0.0, 0.0, 0.0,
+					0.0, 1.0, 0.0, 0.0,
+					0.0, 0.0, 1.0, speed,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = positiveZ.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;
+		case 's':
+			Matrix negativeZ = new Matrix(new Double[]{1.0, 0.0, 0.0, 0.0,
+					0.0, 1.0, 0.0, 0.0,
+					0.0, 0.0, 1.0, -speed,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = negativeZ.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;
+		case 'a':
+			Matrix positiveX = new Matrix(new Double[]{1.0, 0.0, 0.0, speed,
+					0.0, 1.0, 0.0, 0.0,
+					0.0, 0.0, 1.0, 0.0,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = positiveX.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;
+		case 'd':
+			Matrix negativeX = new Matrix(new Double[]{1.0, 0.0, 0.0, -speed,
+					0.0, 1.0, 0.0, 0.0,
+					0.0, 0.0, 1.0, 0.0,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = negativeX.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;
+		case 'c':
+			Matrix positiveY = new Matrix(new Double[]{1.0, 0.0, 0.0, 0.0,
+					0.0, 1.0, 0.0, speed,
+					0.0, 0.0, 1.0, 0.0,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = positiveY.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;
+		case 'x':
+			Matrix negativeY = new Matrix(new Double[]{1.0, 0.0, 0.0, 0.0,
+					0.0, 1.0, 0.0, -speed,
+					0.0, 0.0, 1.0, 0.0,
+					0.0, 0.0, 0.0, 1.0});
+			RenderParameters.vrp = negativeY.multiply(RenderParameters.vrp);
+			RenderParameters.getPerpMatrix();
+			break;//end of Panning
+			//start of rotate
+		case 'i':
+
+			break;
+		case 'k':
+
+			break;
+		case 'j':
+
+			break;
+		case 'l':
+
+			break;
+		case 'm':
+
+			break;
+		case 'n':
+
+			break;//end of rotate
+			//start of zoom
+		case 'f':
+
+			break;
+		case 'h':
+
+			break;
+
 		}
 	} // end keyTyped
 
