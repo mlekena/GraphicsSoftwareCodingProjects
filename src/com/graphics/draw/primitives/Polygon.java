@@ -1,5 +1,7 @@
 package com.graphics.draw.primitives;
 
+import com.graphics.util.RenderParameters;
+
 public class Polygon
 {
 
@@ -106,5 +108,24 @@ public class Polygon
 	public String getColorInfo()
 	{
 		return "red: " + red + ", green: " + green + ", blue: " + blue;
+	}
+	
+	public Vector3 normal(){
+		Vertex center = RenderParameters.v[vertexIndices[0]];
+		Vertex one = RenderParameters.v[vertexIndices[1]];
+		Vertex end = RenderParameters.v[vertexIndices[getNumVs()-1]];
+		
+		Vertex dirVertexOne = one.subtract(center);
+		Vertex dirVertexTwo = end.subtract(center);
+		
+		return Vector3.toVector3(dirVertexOne).crossProduct(Vector3.toVector3(dirVertexTwo));
+	}
+	
+	public Vertex planeEquation(){
+		Vector3 normal = normal();
+		Vertex point = RenderParameters.v[vertexIndices[0]];
+		double paramD = normal.x()*point.x() + normal.y()*point.y() + normal.z()*point.z();
+		
+		return new Vertex(normal.x(), normal.y(), normal.z(), paramD);
 	}
 }

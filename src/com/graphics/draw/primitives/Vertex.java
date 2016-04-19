@@ -38,7 +38,7 @@ public class Vertex {
 	}
 	
 	public double h(){
-		return points[4];
+		return points[3];
 	}
 	
 	public double get(int index){
@@ -47,7 +47,7 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "Vector => [x: "+ points[0] +
+		return "Vertex => [x: "+ points[0] +
 				", y: "+ points[1] + 
 				", z: "+ points[2] +
 				", h: " + points[3] + "]";
@@ -64,7 +64,11 @@ public class Vertex {
 		return new Vertex(x() - v.x(),
 				y() - v.y(),
 				z() - v.z(),
-				h() - v.h());
+				h());
+	}
+	
+	public Double magnitude(){
+		return Math.sqrt((Math.pow(x(), 2) + Math.pow(y(), 2) + Math.pow(z(), 2)));
 	}
 	
 	

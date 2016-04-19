@@ -412,7 +412,7 @@ private String fragmentShaderString =
         ModelViewProjectionMatrix_location = gl.glGetUniformLocation(shaderProgram, "uniform_Projection");
 
         /* GL2ES2 also includes the intersection of GL3 core
-         * GL3 core and later mandates that a "Vector Buffer Object" must
+         * GL3 core and later mandates that a "Vector3 Buffer Object" must
          * be created and bound before calls such as gl.glDrawArrays is used.
          * The VBO lines in this demo makes the code forward compatible with
          * OpenGL 3 and ES 3 core and later where a default

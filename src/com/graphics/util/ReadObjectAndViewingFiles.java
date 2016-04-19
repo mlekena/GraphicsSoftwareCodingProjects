@@ -36,8 +36,8 @@ package com.graphics.util;
 import java.io.*;
 import java.util.*;
 import com.graphics.draw.primitives.*;
-import com.graphics.draw.primitives.Vector;
-
+import com.graphics.draw.primitives.Vector3;
+ 
 public class ReadObjectAndViewingFiles 
 {
 
@@ -46,8 +46,8 @@ public class ReadObjectAndViewingFiles
 
 	/* Viewing parameters */
 	 private static Vertex vrp;
-	 private static Vector vpn;
-	 private static Vector vup;
+	 private static Vector3 vpn;
+	 private static Vector3 vup;
 	 private static Vertex prp;
 	 private static double umin=0, umax=0, vmin=0, vmax=0;
 	 private static double frontClip=0, backClip=0;
@@ -242,7 +242,7 @@ public class ReadObjectAndViewingFiles
 					y1 = Double.parseDouble(tempstr);
 					tempstr = st.nextToken();
 					z1 = Double.parseDouble(tempstr);
-				vpn = new Vector(x1,y1,z1);
+				vpn = new Vector3(x1,y1,z1);
 			} else {
 				System.out.println("Expecting VPN line in file "
 						+ viewfName);
@@ -260,7 +260,7 @@ public class ReadObjectAndViewingFiles
 					y1 = Double.parseDouble(tempstr);
 					tempstr = st.nextToken();
 					z1 = Double.parseDouble(tempstr);
-				vup = new Vector(x1,y1,z1);
+				vup = new Vector3(x1,y1,z1);
 			} else {
 				System.out.println("Expecting VUP line in file "
 						+ viewfName);
@@ -340,6 +340,11 @@ public class ReadObjectAndViewingFiles
 
 
 		// write code here to print out the VRP, PRP, VUP and VPN
+		System.out.println("VRP:" + vrp);
+		System.out.println("PRP: " + prp);
+		System.out.println("VUP" + vup);
+		System.out.println("VPN: " + vpn);
+		
 		
 		System.out.print("WINDOW =");
 		System.out.println(" " + umin + " " + umax + " " + vmin + " " + vmax);

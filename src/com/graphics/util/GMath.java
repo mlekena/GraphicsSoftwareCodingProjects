@@ -1,7 +1,7 @@
 package com.graphics.util;
 
 import com.graphics.draw.primitives.Coords2d;
-import com.graphics.draw.primitives.Vector;
+import com.graphics.draw.primitives.Vector3;
 
 public class GMath {
 	

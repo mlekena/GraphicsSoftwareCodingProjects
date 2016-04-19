@@ -17,6 +17,7 @@ import java.awt.Frame;
 import java.awt.event.*;
 
 import com.graphics.util.ReadObjectAndViewingFiles;
+import com.graphics.util.RenderParameters;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -31,6 +32,7 @@ public class ExampleMain {
 	{
 		/*Initialise the view parameters from the view and object files*/
 		ReadObjectAndViewingFiles.readViewParameters(args);
+		RenderParameters.getPerpMatrix();
 		
 		/* Create the Frame */
       	testFrame = new Frame("TestFrame");
